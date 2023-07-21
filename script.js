@@ -5,6 +5,27 @@ let minutes = 0;
 let seconds = 0;
 let interval; // To store timer values
 
+// new addition to reset the timer
+async function resetTimer() {
+  // ... Your existing code to reset the timer ...
+
+  // Get the highest time from the serverless function
+  const highestTime = await getHighestTime();
+
+  if (highestTime) {
+    // Update the display with the highest time
+    days = highestTime.days;
+    hours = highestTime.hours;
+    minutes = highestTime.minutes;
+    seconds = highestTime.seconds;
+    updateTimerDisplay();
+  } else {
+    // Display a message if no highest time is found
+    console.log('No highest time found.');
+  }
+}
+
+
 // Function to update the timer display
 function updateTimerDisplay() {
     const daysDisplay = document.getElementById('days');
