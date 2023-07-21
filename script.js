@@ -132,4 +132,52 @@ document.getElementById('button-reset').addEventListener('click', () => {
 // Call the initTimer function when the page loads
 window.addEventListener('load', initTimer);
 
+// New code to get the DB working
 
+// Function to update the highest time display
+async function updateHighestTimeDisplay() {
+    try {
+        const response = await fetch('/.netlify/functions/timer', {
+            method: 'POST',
+            body: JSON.stringify({ action: 'getHighestTime' })
+        });
+
+        if (response.ok) {
+            const highestTimeState = await response.json();
+            const highestTimeDisplay = document.getElementById('highest-time');
+
+            highestTimeDisplay.innerText = `${String(highestTimeState.days).padStart(2, '0')} : ${String(highestTimeState.hours).padStart(2, '0')} : ${String(highestTimeState.minutes).padStart(2, '0')} : ${String(highestTimeState.seconds).padStart(2, '0')}`;
+        } else {
+            console.error('Failed to fetch highest timer data:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching highest timer data:', error);
+    }
+}
+
+// Function to start the timer when the "Start" button is clicked
+document.getElementById('button-start').addEventListener('click', () => {
+    startTimer();
+    const timerState = {
+        days: days,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+    };
+    sendTimerData('start', timerState);
+  });
+
+// Function to handle the "Reset" button click
+document.getElementById('button-reset').addEventListener('click', async () => {
+    resetTimer();
+    sendTimerData('reset', {});
+    // Fetch and display the highest time after resetting the timer
+    await updateHighestTimeDisplay();
+});
+
+// Call the initTimer function when the page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    initTimer();
+    // Fetch and display the highest time when the page loads
+    await updateHighestTimeDisplay();
+});
