@@ -2,6 +2,25 @@
 
 const faunadb = require('faunadb');
 
+// new addition to get the highest time
+async function getHighestTime() {
+  try {
+    const { data } = await client.query(
+      q.Paginate(q.Match(q.Index('timer_by_action'), 'start'), { size: 1, reverse: true })
+    );
+
+    if (data.length > 0) {
+      return data[0].data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving highest time:', error);
+    return null;
+  }
+}
+
+
 // Configure FaunaDB client with your secret key
 const secret = 'fnAFJX8bt7AAUEle-qxXg08oTQ4RQkZlx4umrMz3'; // Replace with your actual FaunaDB secret key
 const q = faunadb.query;
