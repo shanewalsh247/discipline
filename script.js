@@ -60,11 +60,6 @@ function startTimer() {
     }, 1000);
 }
 
-// Function to stop the timer
-function stopTimer() {
-    clearInterval(interval);
-}
-
 // Function to reset the timer
 function resetTimer() {
     clearInterval(interval);
@@ -127,17 +122,6 @@ document.getElementById('button-start').addEventListener('click', () => {
     sendTimerData('start', timerState);
 });
 
-// Event listener for the "Stop" button click
-document.getElementById('button-stop').addEventListener('click', () => {
-    stopTimer();
-    const timerState = {
-        days: days,
-        hours: hours,
-        minutes: minutes,
-        seconds: seconds
-    };
-    sendTimerData('stop', timerState);
-});
 
 // Event listener for the "Reset" button click
 document.getElementById('button-reset').addEventListener('click', () => {
